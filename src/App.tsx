@@ -2,16 +2,16 @@ import { useState, useRef } from 'react';
  
 const App = () => {
   
-  const dragItem = useRef();
-  const dragOverItem = useRef();
+  const dragItem = useRef<number|null>();
+  const dragOverItem = useRef<number|null>();
   const [list, setList] = useState(['Item 1','Item 2','Item 3','Item 4','Item 5','Item 6']);
  
-  const dragStart = (e, position) => {
+  const dragStart = (e, position: number) => {
     dragItem.current = position;
     console.log(e.target.innerHTML);
   };
  
-  const dragEnter = (e, position) => {
+  const dragEnter = (e, position: number) => {
     dragOverItem.current = position;
     console.log(e.target.innerHTML);
   };
