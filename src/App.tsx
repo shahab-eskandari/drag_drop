@@ -1,28 +1,26 @@
 import { useState, useRef } from 'react';
+import { items } from './data/items';
+import { Item } from './types/item';
  
 const App = () => {
   
-  const dragItem = useRef<number|null>();
-  const dragOverItem = useRef<number|null>();
-  const [list, setList] = useState(['Item 1','Item 2','Item 3','Item 4','Item 5','Item 6']);
+  const draggedItemIndex = useRef<number>(0);
+  const dragOverItemIndex = useRef<number>(0);
+  const [list, setList] = useState<Item[]>(items);
  
-  const dragStart = (e, position: number) => {
-    dragItem.current = position;
-    console.log(e.target.innerHTML);
+  const dragStart = (index: number) => {
+    draggedItemIndex.current = index;
   };
  
-  const dragEnter = (e, position: number) => {
-    dragOverItem.current = position;
-    console.log(e.target.innerHTML);
+  const dragEnter = (index: number) => {
+    dragOverItemIndex.current = index;
   };
  
-  const drop = (e) => {
+  const drop = () => {
     const copyListItems = [...list];
-    const dragItemContent = copyListItems[dragItem.current];
-    copyListItems.splice(dragItem.current, 1);
-    copyListItems.splice(dragOverItem.current, 0, dragItemContent);
-    dragItem.current = null;
-    dragOverItem.current = null;
+    [copyListItems[draggedItemIndex.current],copyListItems[dragOverItemIndex.current]] = [copyListItems[dragOverItemIndex.current], copyListItems[draggedItemIndex.current]];
+    draggedItemIndex.current = 0;
+    dragOverItemIndex.current = 0;
     setList(copyListItems);
   };
  
@@ -31,13 +29,14 @@ const App = () => {
     {
     list&&
     list.map((item, index) => (
-      <div style={{backgroundColor:'lightblue', margin:'20px 25%', textAlign:'center', fontSize:'40px'}}
-        onDragStart={(e) => dragStart(e, index)}
-        onDragEnter={(e) => dragEnter(e, index)}
-        onDragEnd={drop}
-        key={index}
+      <div style={{backgroundColor:'lightblue', margin:'20px', textAlign:'center'}}
+        onDragStart={() => dragStart(index)}
+        onDragEnter={() => dragEnter(index)}
+        onDragEnd={()=>drop()}
+        key={item.id}
         draggable>
-          {item}
+          <h3>{item.title}</h3>
+          <p style={{fontSize:12}}>{item.description}</p>
       </div>
       ))}
     </>
