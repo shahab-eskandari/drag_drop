@@ -18,7 +18,9 @@ const App = () => {
  
   const drop = () => {
     const copyListItems = [...list];
+    // Swapping dragged item with draggedOver item by using destructuring assignment
     [copyListItems[draggedItemIndex.current],copyListItems[dragOverItemIndex.current]] = [copyListItems[dragOverItemIndex.current], copyListItems[draggedItemIndex.current]];
+    // resetting the indexes of dragged Item and draggedOver items
     draggedItemIndex.current = 0;
     dragOverItemIndex.current = 0;
     setList(copyListItems);
